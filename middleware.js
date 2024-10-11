@@ -1,40 +1,26 @@
 import { NextResponse } from 'next/server';
-import Cors from 'cors';
-
-// Khởi tạo middleware cors
-const cors = Cors({
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  origin: '*', // Thay thế bằng domain cụ thể trong môi trường production
-  optionsSuccessStatus: 200,
-});
-
-// Helper function để chạy middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
-
-// Middleware function
-export async function middleware(request) {
-  // Chỉ áp dụng cho các route API
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    // Tạo NextResponse object
-    const response = NextResponse.next();
-
-    // Chạy cors middleware
-    await runMiddleware(request, response, cors);
-
-    return response;
-  }
-}
 
 // Chỉ định các route sẽ áp dụng middleware
 export const config = {
   matcher: '/api/:path*',
 };
+
+export function middleware(request) {
+  // Chỉ áp dụng cho các route API
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    // Tạo NextResponse object
+    const response = NextResponse.next();
+
+    // Thêm CORS headers
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    // Xử lý preflight requests
+    if (request.method === 'OPTIONS') {
+      return new NextResponse(null, { status: 200, headers: response.headers });
+    }
+
+    return response;
+  }
+}

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  const { username } = await request.json();
+  const formData = await request.formData();
+  const username = formData.get('username');
 
   if (!username) {
     return NextResponse.json({ message: 'Username is required' }, { status: 400 });

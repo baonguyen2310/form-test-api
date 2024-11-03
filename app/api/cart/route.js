@@ -2,7 +2,29 @@ import { NextResponse } from "next/server";
 import connectDB from "../../lib/mongodb";
 import Cart from "../../models/Cart";
 
-// GET - Lấy giỏ hàng của user
+// #swagger.start
+/* 
+#swagger.path = '/cart'
+#swagger.method = 'get'
+#swagger.tags = ['Cart']
+#swagger.description = 'Get user cart'
+#swagger.parameters['userId'] = {
+    in: 'query',
+    description: 'User ID to fetch cart for',
+    required: true,
+    type: 'string'
+}
+#swagger.responses[200] = {
+    description: 'Cart retrieved successfully',
+    schema: { $ref: '#/components/schemas/Cart' }
+}
+#swagger.responses[400] = {
+    description: 'User ID is required'
+}
+#swagger.responses[500] = {
+    description: 'Server error'
+}
+*/
 export async function GET(request) {
     try {
         await connectDB();
@@ -28,8 +50,44 @@ export async function GET(request) {
         );
     }
 }
+// #swagger.end
 
-// POST - Thêm sản phẩm vào giỏ hàng
+// #swagger.start
+/* 
+#swagger.path = '/cart'
+#swagger.method = 'post'
+#swagger.tags = ['Cart']
+#swagger.description = 'Add product to cart'
+#swagger.requestBody = {
+    required: true,
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                required: ['userId', 'productId', 'quantity'],
+                properties: {
+                    userId: {
+                        type: 'string',
+                        description: 'User ID who owns the cart'
+                    },
+                    productId: {
+                        type: 'number',
+                        description: 'ID of product to add'
+                    },
+                    quantity: {
+                        type: 'number',
+                        description: 'Quantity of product to add'
+                    }
+                }
+            }
+        }
+    }
+}
+#swagger.responses[200] = {
+    description: 'Product added successfully',
+    schema: { $ref: '#/components/schemas/Cart' }
+}
+*/
 export async function POST(request) {
     try {
         await connectDB();
@@ -81,8 +139,44 @@ export async function POST(request) {
         );
     }
 }
+// #swagger.end
 
-// PUT - Cập nhật số lượng sản phẩm
+// #swagger.start
+/* 
+#swagger.path = '/cart'
+#swagger.method = 'put'
+#swagger.tags = ['Cart']
+#swagger.description = 'Update product quantity in cart'
+#swagger.requestBody = {
+    required: true,
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                required: ['userId', 'productId', 'quantity'],
+                properties: {
+                    userId: {
+                        type: 'string',
+                        description: 'User ID who owns the cart'
+                    },
+                    productId: {
+                        type: 'number',
+                        description: 'ID of product to update'
+                    },
+                    quantity: {
+                        type: 'number',
+                        description: 'New quantity for the product'
+                    }
+                }
+            }
+        }
+    }
+}
+#swagger.responses[200] = {
+    description: 'Cart updated successfully',
+    schema: { $ref: '#/components/schemas/Cart' }
+}
+*/
 export async function PUT(request) {
     try {
         await connectDB();
@@ -136,8 +230,49 @@ export async function PUT(request) {
         );
     }
 }
+// #swagger.end
 
-// DELETE - Xóa sản phẩm khỏi giỏ hàng
+// #swagger.start
+/* 
+#swagger.path = '/cart'
+#swagger.method = 'delete'
+#swagger.tags = ['Cart']
+#swagger.description = 'Remove product from cart'
+#swagger.requestBody = {
+    required: true,
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                required: ['userId', 'productId'],
+                properties: {
+                    userId: {
+                        type: 'string',
+                        description: 'User ID who owns the cart'
+                    },
+                    productId: {
+                        type: 'number',
+                        description: 'ID of product to remove'
+                    }
+                }
+            }
+        }
+    }
+}
+#swagger.responses[200] = {
+    description: 'Product removed successfully',
+    schema: { $ref: '#/components/schemas/Cart' }
+}
+#swagger.responses[400] = {
+    description: 'Missing required fields or invalid product ID'
+}
+#swagger.responses[404] = {
+    description: 'Cart not found'
+}
+#swagger.responses[500] = {
+    description: 'Server error'
+}
+*/
 export async function DELETE(request) {
     try {
         await connectDB();
@@ -181,4 +316,5 @@ export async function DELETE(request) {
             { status: 500 }
         );
     }
-} 
+}
+// #swagger.end 

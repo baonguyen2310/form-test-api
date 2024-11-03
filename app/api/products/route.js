@@ -147,6 +147,27 @@ const products = [
     }
 ];
 
+// #swagger.start
+/* 
+#swagger.path = '/products'
+#swagger.method = 'get'
+#swagger.tags = ['Products']
+#swagger.description = 'Get all products or paginated products'
+#swagger.parameters['page'] = {
+    in: 'query',
+    description: 'Page number for pagination',
+    type: 'integer'
+}
+#swagger.responses[200] = {
+    description: 'Products retrieved successfully',
+    schema: {
+        products: [{ $ref: '#/components/schemas/Product' }],
+        currentPage: 1,
+        totalPages: 4,
+        totalProducts: 18
+    }
+}
+*/
 export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get('page');
@@ -172,3 +193,4 @@ export async function GET(request) {
         });
     }
 }
+// #swagger.end

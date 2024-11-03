@@ -1,0 +1,320 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "E-commerce API",
+    "description": "Documentation for e-commerce API endpoints",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Your Name",
+      "email": "your.email@example.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Products",
+      "description": "Products endpoints"
+    },
+    {
+      "name": "Cart",
+      "description": "Shopping cart endpoints"
+    },
+    {
+      "name": "Orders",
+      "description": "Order management endpoints"
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories endpoints"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Get all products or paginated products",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                },
+                "currentPage": {
+                  "type": "number",
+                  "example": 1
+                },
+                "totalPages": {
+                  "type": "number",
+                  "example": 4
+                },
+                "totalProducts": {
+                  "type": "number",
+                  "example": 18
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart": {
+      "get": {
+        "tags": [
+          "Cart"
+        ],
+        "description": "Get user cart",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "User ID to fetch cart for",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart retrieved successfully",
+            "schema": {
+              "$ref": "#/components/schemas/Cart"
+            }
+          },
+          "400": {
+            "description": "User ID is required"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cart"
+        ],
+        "description": "Add product to cart",
+        "responses": {
+          "200": {
+            "description": "Product added successfully",
+            "schema": {
+              "$ref": "#/components/schemas/Cart"
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userId",
+                  "productId",
+                  "quantity"
+                ],
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "User ID who owns the cart"
+                  },
+                  "productId": {
+                    "type": "number",
+                    "description": "ID of product to add"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "description": "Quantity of product to add"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Cart"
+        ],
+        "description": "Update product quantity in cart",
+        "responses": {
+          "200": {
+            "description": "Cart updated successfully",
+            "schema": {
+              "$ref": "#/components/schemas/Cart"
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userId",
+                  "productId",
+                  "quantity"
+                ],
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "User ID who owns the cart"
+                  },
+                  "productId": {
+                    "type": "number",
+                    "description": "ID of product to update"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "description": "New quantity for the product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Cart"
+        ],
+        "description": "Remove product from cart",
+        "responses": {
+          "200": {
+            "description": "Product removed successfully",
+            "schema": {
+              "$ref": "#/components/schemas/Cart"
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userId",
+                  "productId"
+                ],
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "User ID who owns the cart"
+                  },
+                  "productId": {
+                    "type": "number",
+                    "description": "ID of product to remove"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Áo thun"
+          },
+          "category": {
+            "type": "string",
+            "example": "Quần áo"
+          },
+          "price": {
+            "type": "number",
+            "example": 150000
+          },
+          "rating": {
+            "type": "number",
+            "example": 3
+          },
+          "imgurl": {
+            "type": "string",
+            "example": "https://example.com/image.jpg"
+          }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User ID who owns the cart"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "number",
+                  "description": "Product ID in cart"
+                },
+                "quantity": {
+                  "type": "number",
+                  "description": "Quantity of product"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Quần áo"
+          }
+        }
+      }
+    }
+  }
+}

@@ -149,6 +149,45 @@ const products = [
     }
 ];
 
+/**
+ * @swagger
+ * /api/order:
+ *   post:
+ *     tags: [Orders]
+ *     summary: Create a new order
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [productId, quantity]
+ *             properties:
+ *               productId:
+ *                 type: integer
+ *               quantity:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Order created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 productId:
+ *                   type: integer
+ *                 quantity:
+ *                   type: integer
+ *                 totalPrice:
+ *                   type: number
+ *       400:
+ *         description: Invalid quantity
+ *       404:
+ *         description: Product not found
+ */
 export async function POST(request) {
     const { productId, quantity } = await request.json();
 

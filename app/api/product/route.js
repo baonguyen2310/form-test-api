@@ -149,6 +149,44 @@ const products = [
     }
 ];
 
+/**
+ * @swagger
+ * /api/product:
+ *   get:
+ *     tags: [Products]
+ *     summary: Get product by ID
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: Product retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 category:
+ *                   type: string
+ *                 price:
+ *                   type: number
+ *                 rating:
+ *                   type: number
+ *                 imgurl:
+ *                   type: string
+ *       400:
+ *         description: Missing product ID
+ *       404:
+ *         description: Product not found
+ */
 export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
